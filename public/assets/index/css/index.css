@@ -1,0 +1,284 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+/* @media (min-width:800px){
+    div.main-single{
+        width: 70vw !important;
+    }
+} */
+.header{
+    text-align: center;
+}
+.header ul{
+    list-style-type: none;
+}
+.header ul li{
+    font-size: .9rem;
+    color:white;
+    display: inline-block;
+    background-color: #d1d1d1;
+    padding:.7rem;
+    border-radius: 20px;
+}
+.header ul li i{
+    margin: 2px;
+}
+.li-active{
+    background-color: rgb(99, 157, 196) !important;
+}
+div.main-single{
+    /* height: 70vh; */
+    /*margin-left: 15vw;*/
+    /*margin-top: 15vh;*/
+    /*这里踩大坑了，如果要改变元素位置就用定位，不要乱用外边距，会影响文档流导致撑开父元素*/
+    /* width:70%; */
+    position: absolute;
+    /* top:15vh; */
+    width: 90vw;
+    left: 5vw;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 5px;
+    /* background: rgba(121, 171, 218, 0.59);
+    box-shadow: 0 0 5px 2px rgba(142, 224, 224, 0.47); */
+    border-radius: 10px;
+    align-items: center;
+}
+.img-container{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 3;
+    text-align: center;
+    /*background-color: #868686;*/
+}
+.img-container:focus{
+    /*去除选中元素后的文本框*/
+    outline: none;
+    /*去除光标,将透明度设置为0*/
+    caret: rgba(255, 255, 255, 0);
+    caret-shape: unset;
+}
+
+.click-upload{
+    position: relative;
+    padding: 5px;
+}
+.click-upload input{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 0;
+    opacity: 0;
+}
+.upload-btn{
+    padding: 10px;
+    border-radius: 5px;
+    background:linear-gradient(to right, #5fc1c7, #86d3bd);
+    border: none;
+}
+.result-box{
+    display: none;
+    /* flex-grow: 1; */
+    width: 80%;
+    /* text-align: center; */
+    /* padding: 5px; */
+    /* background-color: aliceblue; */
+}
+.rs-header{
+    width: 100%;
+    margin-bottom: 0;
+}
+.rs-ul{
+    list-style-type: none;
+    padding: 0;
+}
+.rs-ul li{
+    display: inline-block;
+    padding:.7rem;
+    margin:0;
+    /* background-color: #f3f3f3; */
+}
+.rs-li-active{
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 1px 0px #666;
+}
+.code-box-active{
+    display: block !important;
+}
+.code-box{
+    display: none;
+    /* padding: 10px; */
+    margin-top: 0;
+}
+.code{
+    overflow: auto;
+    color: #fbfbfb;
+    padding: 1rem;
+    background-color: rgba(18, 18, 18, 0.6);
+    font-size: 14px;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.md:focus{
+    outline: none;
+}
+.htmlcode-box{
+    padding: 10px;
+}
+.htmlcode{
+    overflow: auto;
+
+    color: #000000;
+    padding: 8px;
+    background-color: rgba(176, 176, 176, 0.6);
+    font-size: 14px;
+    border-radius: 10px;
+}
+.htmlcode:focus{
+    outline: none;
+}
+.load{
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(243, 234, 234, 0.49);
+    position: fixed;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.load-bar{
+    font-size: 14px;
+    padding:10px;
+    border-radius: 10px;
+    background-color: #ececec;
+    box-shadow: 0 0 1px 1px #f3f3f3;
+}
+.load-bar-title{
+    border-bottom: 1px solid #666;
+}
+.load-bar-title b{
+    margin: 3px;
+}
+.load-bar-content{
+    padding: 20px;
+}
+.jindutiao{
+    position: relative;
+    width: 200px;
+}
+.jindutiao .jdt-ft{
+    position: absolute;
+    top:0;
+    left: 0;
+    display: block;
+    height: 10px;
+    width: 60%;
+    background-color: #86f8f8;
+}
+.jindutiao .jdt-bg{
+    position: absolute;
+    top:0;
+    left: 0;
+    display: block;
+    height: 10px;
+    width: 100%;
+    background-color: #868686;
+}
+.img-preview{
+    width: 100%;
+    height: auto;
+
+}
+
+
+.main-multi{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 90vw;
+    left: 5vw;
+}
+.file-list-container{
+    display: block;
+    margin:0 0 auto;
+    width: 90%;
+    background-color: #ffffff;
+    position: relative;
+    left: 5%;
+    border-radius: 10px;
+    box-shadow: 0 0 6px 2px #cbcbcb;
+}
+.f-l-c-header{
+    font-size: 1.1rem;
+    padding:0.6rem;
+}
+.f-l-c-header::after{
+    margin-top: 5px;
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: rgb(211, 211, 211);
+    content: "";
+}
+.f-l-c-content{
+    padding: 5px;
+    background-color: rgb(247 247 247 / 84%);
+}
+.list-no-content{
+    text-align: center;
+    
+}
+.file-list-box{
+    overflow-x: scroll;
+    white-space: no-wrap;
+}
+.file-list-menu{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    align-items: center;
+}
+.file-list-menu>div{
+    margin: 3px 5px;
+    padding: 2px;
+}
+.menu-upload{
+    position: absolute;
+    right:10px;
+    top:0;
+}
+/* 按钮切换组 */
+.change-group .change-active{
+    background-color: #86c400;
+}
+.change-group-default .change-active{
+    background-color: rgb(105, 156, 233);
+}
+.change-group-default .change-noactive{
+    background-color: rgb(201, 201, 201);
+}
+.change-group-green .change-active{
+    background-color: rgb(98, 216, 143);
+}
+.change-group-green .change-noactive{
+    background-color: rgb(201, 201, 201);
+}
+.change-group-red .change-active{
+    background-color: rgb(233, 64, 93)
+}
+.change-group-red .change-noactive{
+    background-color: rgb(201, 201, 201);
+}

@@ -1,0 +1,122 @@
+<?php /*a:1:{s:68:"/www/wwwroot/pic.xiaodu0.com/application/index/view/index/index.html";i:1700819551;}*/ ?>
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简单图床</title>
+    <link rel="stylesheet" href="/assets/index/css/index.css">
+    <!-- iconfont -->
+    <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4326303_0b9fp0ffvcma.css">
+    <script src="//at.alicdn.com/t/c/font_4326303_vkiro7ssu5q.js"></script>
+</head>
+<body>
+<!--背景遮罩-->
+<div class="bg-filter">
+    
+</div>
+<!--背景遮罩-->
+<!--主容器开始-->
+<div class="header">
+        <ul class="change-group ">
+            <li id="single" onclick="changeMain(this)" class="change-active"><i class="iconfont icon-yihangyige"></i>单张</li>
+            <li id="multi" onclick="changeMain(this)" class="change-noactive"><i class="iconfont icon-piliangdaoru"></i>批量</li>
+        </ul>
+</div>
+<div class="main-single">
+    
+    <div class="img-container" id="img-container" contenteditable="true">
+        <img src="/assets/index/img/upload.png" style="width: 200px;height: 200px" alt="" />
+        <br>
+        <span>将图片拖动到/粘贴到/点击此处上传。</span>
+        <br>
+        <div class="click-upload">
+            <input id="click-file" type="file" placeholder="点击上传">
+            <button class="upload-btn">也可以点我上传</button>
+        </div>
+    </div>
+    <div class='result-box'>
+        <div class="rs-header">
+            <ul class="rs-ul change-group change-group-red">
+                <li id="url" class="change-active" onclick="changeCode(this)">
+                    URL直链
+                </li>
+                <li id="md" onclick="changeCode(this)">
+                    Markdown
+                </li>
+                <li id="html" onclick="changeCode(this)">
+                    HTML
+                </li>
+                <li id="base64" onclick="changeCode(this)">
+                    base64
+                </li>
+            </ul>
+        </div>
+        <div class="code-box code-box-active" id="code-url">
+            <code id="urlcode" class="code" contenteditable="true">这里是图片URL</code>
+        </div>
+        <div class="code-box" id="code-md">
+            <code id="mdcode" class="code" contenteditable="true">这里是md代码</code>
+        </div>
+        <div class="code-box" id="code-html">
+            <code id="htmlcode" class="code" contenteditable="true">这里是HTML代码</code>
+        </div>
+        <div class="code-box" id="code-base64">
+            <code id="base64code" class="code" contenteditable="true">这里是base64代码</code>
+        </div>
+        <!-- <div class="htmlcode-box">
+            HTML：<pre id="htmlcode" class="htmlcode" contenteditable="true">这里是HTML代码</pre>
+        </div> -->
+        <button onclick="window.location.href='./'" style="width:80%;margin-left: 10%;margin-top: 10px;padding: .5rem;border:none;border-radius: 10px;background-color:antiquewhite;">继续上传</button>
+
+    </div>
+</div>
+<div class="main-multi">
+    <!-- 文件列表容器开始 -->
+    <div class="file-list-container">
+        <!-- 图片列表头部 -->
+        <div class="f-l-c-header">
+            <span>图片列表</span>
+        </div>
+        <div class="f-l-c-content">
+            <div class="file-list-box">
+                <div class="list-no-content" id="list-no-content">
+                    <img src="/assets/index/img/empty.png" alt="" class="empty-img">
+                    <p style="color: rgb(79, 78, 78);">还没有图片，拖动/粘贴到此或点击下方按钮添加</p>
+                </div>
+            </div>
+        </div>
+        <div class="file-list-menu">
+            <input type="file" id="add-file-input" style="display: none;" onchange="addFile(this)">
+            <div class="menu-add" onclick="addFileBtnClick()">
+                <svg t="1700814555860" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4041" data-spm-anchor-id="a313x.search_index.0.i0.26c13a81fyPoE8" width="20" height="20"><path d="M512 118.31808c217.15456 0 393.68704 176.52736 393.68704 393.68192S729.15456 905.68704 512 905.68704 118.31808 729.15456 118.31808 512 294.84544 118.31808 512 118.31808M512 31.744C246.9632 31.744 31.744 246.9632 31.744 512s215.2192 480.256 480.256 480.256 480.256-215.2192 480.256-480.256S777.0368 31.744 512 31.744z" p-id="4042" fill="#1296db"></path><path d="M778.97216 555.04384H245.02784c-18.86208 0-33.85344-19.34336-33.85344-43.04384 0-23.69536 14.99136-43.04384 33.85344-43.04384h533.4528c18.8672 0 33.85344 19.34336 33.85344 43.04384 0.49152 24.18176-14.98624 43.04384-33.36192 43.04384z" p-id="4043" fill="#1296db"></path><path d="M468.95616 778.97216V245.02784c0-18.86208 19.34336-33.85344 43.04384-33.85344s43.04384 14.99136 43.04384 33.85344v533.4528c0 18.8672-19.34336 33.85344-43.04384 33.85344-24.18176 0.49152-43.04384-14.98624-43.04384-33.36192z" p-id="4044" fill="#1296db"></path></svg>
+            </div>
+            <div class="menu-clear">
+                <svg t="1700814777267" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5075" width="20" height="20"><path d="M274.688 811.52c-8.32 10.688-20.48 24-36.48 39.936a44.736 44.736 0 0 1-43.136 11.52l-78.08-20.864-23.104-8.704c-29.632-25.536-44.608-61.44-39.36-95.552 5.76-37.12 32.32-67.648 82.112-88.704 34.368-14.656 67.584-74.176 89.664-157.44l3.84-14.464-2.24-4.032-14.272-4.48c-17.856-5.504-30.08-16.96-34.432-31.808-4.352-14.912-0.064-30.72 12.096-43.904l123.776-135.488c9.92-10.752 24.832-19.392 41.856-23.936 16.64-4.416 33.984-4.672 48.64-0.768l123.584 33.024 4.096-2.368 55.36-205.824c8.704-32.448 43.968-51.456 78.72-42.24l83.2 22.272c34.752 9.28 55.808 43.392 47.104 75.84l-55.36 205.824 2.368 4.096 118.528 31.68c14.592 3.84 29.568 12.8 41.728 24.96 12.416 12.352 21.12 27.2 24.192 41.472l39.36 179.072c3.84 17.536-0.384 33.28-11.648 44.032a43.776 43.776 0 0 1-25.92 11.712l-12.928 1.408-2.944 3.072-1.024 12.864c-2.56 34.048-6.4 62.976-17.92 139.52l-6.528 43.648c-3.84 26.048-6.528 46.976-8.768 66.304-4.224 36.544-23.488 65.28-54.656 81.6-15.424 8.128-32 12.672-45.824 13.44l-4.032 0.192-90.432-24.32a18.88 18.88 0 0 1-12.16-26.688l35.392-71.552-20.352 26.24a515.328 515.328 0 0 1-47.36 50.56 19.008 19.008 0 0 1-18.112 4.672l-75.456-20.16a18.88 18.88 0 0 1-12.16-26.624l35.456-71.552-20.352 26.24a510.336 510.336 0 0 1-47.36 50.56 18.944 18.944 0 0 1-18.112 4.672l-88.448-23.68a18.944 18.944 0 0 1-12.096-26.56l35.392-71.552-20.352 26.24a515.84 515.84 0 0 1-47.36 50.56 18.944 18.944 0 0 1-18.112 4.672l-62.528-16.704a18.944 18.944 0 0 1-12.096-26.688l35.392-71.488-20.352 26.24z m577.024-413.824l-142.784-38.208a22.272 22.272 0 0 1-15.808-27.264l61.056-227.072a22.272 22.272 0 0 0-15.808-27.264L657.728 56.32a22.4 22.4 0 0 0-27.328 15.744l-60.992 227.136a22.336 22.336 0 0 1-27.392 15.744l-147.84-39.552c-14.848-3.968-37.248 1.728-46.464 11.84l-113.92 124.544a11.072 11.072 0 0 0 5.376 18.24l669.184 178.816a11.136 11.136 0 0 0 13.824-13.12l-36.16-164.608-34.304-33.408zM317.44 709.76a22.4 22.4 0 0 1 27.328-6.848l3.392 1.6h0.128a21.888 21.888 0 0 1 10.432 29.248c-15.616 32.896-27.136 56.32-34.432 70.4-3.584 6.912-7.232 13.696-10.88 20.48l-11.648 21.12 34.176 9.152 2.944-0.64 6.208-4.928c29.504-23.68 61.888-59.136 97.088-106.176a22.4 22.4 0 0 1 27.264-6.848l3.52 1.6 0.128 0.064c10.944 5.12 15.616 18.24 10.432 29.12-15.616 32.896-27.136 56.32-34.432 70.4-3.904 7.552-7.552 14.336-10.88 20.48l-11.712 21.12 54.592 14.592 2.944-0.64 6.208-4.928c29.44-23.68 61.76-58.88 96.896-105.92 6.4-8.512 17.984-11.328 27.584-6.72l3.2 1.536a22.208 22.208 0 0 1 10.432 29.504c-15.36 32.384-26.752 55.68-34.112 69.76a854.4 854.4 0 0 1-10.88 20.48l-11.712 21.12 55.04 14.72 2.944-0.64 6.208-4.928c29.44-23.68 61.76-58.944 96.96-105.984 6.4-8.512 17.92-11.328 27.52-6.784l3.2 1.536h0.064a22.016 22.016 0 0 1 10.432 29.44c-21.44 44.608-36.48 74.752-45.12 90.304l-11.712 21.248 63.104 16.832 5.248-0.768c8.064-1.664 15.552-4.48 22.4-8.448 17.024-9.792 26.432-24.96 28.928-46.336 1.856-16.128 31.552-223.616 33.6-255.552l0.832-12.736-2.432-3.456-592.512-158.272-4.096 2.368-4.096 14.976a572.608 572.608 0 0 1-27.584 80c-24.192 55.04-53.568 90.112-86.784 104.192-32.64 13.824-52.224 32.64-55.68 54.848-2.56 16.256 4.096 33.92 17.792 48.64l3.072 3.328 92.16 25.152 3.008-0.64 6.144-4.928 97.152-106.24z" fill="#d81e06" p-id="5076"></path></svg>
+            </div>
+            <div class="menu-upload">
+                <svg t="1700819463304" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13350" id="mx_n_1700819463305" width="25" height="25"><path d="M576 631.466667V725.333333h170.666667c59.733333-8.533333 106.666667-64 106.666666-128 0-72.533333-55.466667-128-128-128-17.066667 0-29.866667 4.266667-42.666666 8.533334V469.333333c0-93.866667-76.8-170.666667-170.666667-170.666666s-170.666667 76.8-170.666667 170.666666c0 17.066667 4.266667 29.866667 4.266667 46.933334-8.533333-4.266667-17.066667-4.266667-25.6-4.266667C260.266667 512 213.333333 558.933333 213.333333 618.666667S260.266667 725.333333 320 725.333333h170.666667v-93.866666l-46.933334 46.933333L384 618.666667l149.333333-149.333334 149.333334 149.333334-59.733334 59.733333-46.933333-46.933333z m0 93.866666v85.333334h-85.333333v-85.333334h-42.666667v85.333334h-128C213.333333 810.666667 128 725.333333 128 618.666667c0-85.333333 55.466667-157.866667 128-183.466667C273.066667 311.466667 379.733333 213.333333 512 213.333333c110.933333 0 209.066667 72.533333 243.2 170.666667 102.4 12.8 183.466667 102.4 183.466667 213.333333s-85.333333 200.533333-192 213.333334h-128v-85.333334h-42.666667z" fill="#0eaff3" p-id="13351"></path></svg>
+            </div>
+        </div>
+    </div>
+    <!-- 文件列表容器结束 -->
+</div>
+<div class="load" id="load">
+    <div class="load-bar">
+        <div class="load-bar-title">
+            <b>上传中.....</b>
+        </div>
+        <div class="load-bar-content">
+            <div class="jindutiao" id="jdt">
+                <div class="jdt-bg"></div>
+                <div class="jdt-ft"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--主容器结束-->
+<script src="/assets/index/js/script.js"></script>
+</body>
+</html>
