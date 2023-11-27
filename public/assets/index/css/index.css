@@ -204,7 +204,7 @@ div.main-single{
 
 
 .main-multi{
-    display: flex;
+    display: none;
     flex-direction: column;
     position: absolute;
     width: 90vw;
@@ -259,6 +259,33 @@ div.main-single{
     position: absolute;
     right:10px;
     top:0;
+}
+
+/* 图片列表项 */
+.img-list-item{
+    display: grid;
+    grid-template-columns: 110px 2fr 3fr 1fr;
+    grid-template-rows: 80px;
+    padding:10px;
+}
+.img-item-name{
+    font-size: .8rem;
+}
+.img-item-code{
+    font-size: 0.8rem;
+    background-color: #000000;
+    border-radius: 5px;
+    padding:5px;
+    color:#fbfbfb
+}
+.img-item-btn-group{
+    width: 80px;
+    display: flex;
+    justify-content: space-evenly;
+}
+.img-item-btn-group span img{
+    width: 20px;
+    height: 20px;
 }
 /* 按钮切换组 */
 .change-group .change-active{

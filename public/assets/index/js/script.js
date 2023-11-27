@@ -197,6 +197,7 @@ let addImg2Page=function(file){
         noBox.style.display="none";
     }
     // 在list中写入Dom
+
     let item=document.createElement("div");
     // 图片列表项容器
     let avatar=document.createElement("img");
@@ -208,18 +209,59 @@ let addImg2Page=function(file){
     let btnGroup=document.createElement("div");
     // 按钮组
     let md=document.createElement("span");
+    md.id="item-btn-md";
     // 切换markdown按钮
     let uri=document.createElement("span");
+    uri.id="item-btn-uri";
     // 切换到uri的按钮
     let html=document.createElement("span");
+    html.id="item-btn-html"
     // 切换到图片标签的按钮
     item.classList.add("img-list-item");
-    item.setAttribute("data-id",imgList.length);
+    item.setAttribute("data-id",imgList.length-1);
+    // 容器
+
     avatar.classList.add("img-item-avatar");
-    avatar.setAttribute("src",)
+    avatar.setAttribute("src",window.URL.createObjectURL(file));
+    avatar.setAttribute("width","auto");
+    avatar.setAttribute("height","60px");
+    // 预览图
+
     name.classList.add("img-item-name");
+    name.innerHTML=file["name"];
+    // 文件名
     code.classList.add("img-item-code");
-    btnGroup.classList.add("img-item-btn-group change-group");
+    code.innerHTML="未开始上传图片....Blob为"+window.URL.createObjectURL(file);
+    code.setAttribute("contenteditable","true");
+    // 代码
+
+    icon_uri=document.createElement("img");
+    icon_uri.setAttribute("src","/assets/index/img/uri.png");
+    uri.appendChild(icon_uri);
+    // uri按钮
+
+    icon_md=document.createElement("img");
+    icon_md.setAttribute("src","/assets/index/img/md.png");
+    md.appendChild(icon_md);
+    // md按钮
+    
+    icon_html=document.createElement("img");
+    icon_html.setAttribute("src","/assets/index/img/html.png");
+    html.appendChild(icon_html);
+    // html按钮
+
+    btnGroup.classList.add("img-item-btn-group");
+    btnGroup.appendChild(uri);
+    btnGroup.appendChild(md);
+    btnGroup.appendChild(html);
+    // 按钮组
+
+    // 组合元素
+    item.appendChild(avatar);
+    item.appendChild(name);
+    item.appendChild(code);
+    item.appendChild(btnGroup);
+    document.querySelector("#file-list-box").appendChild(item);
 
 }
 let addFile=(e)=>{
@@ -231,6 +273,121 @@ let addFile=(e)=>{
     // 在页面中展示
     addImg2Page(file)
 }
+
+
+// 写错了 这里不能用循环和ajax异步会导致序列出错。
+// let multiUpload=function(){
+//     // 多文件上传
+//     // 定义结果数组
+//     window.imgResult=new Array();
+//     for(i=0;i<window.imgList.length;i++){
+//         xml=upload(window.imgList[i]);
+//         console.log(i);
+//         xml.addEventListener("loadend",function(e,j=i){
+//             console.log(e);
+//             let status=e.srcElement.status;
+//             row=document.querySelector(`div[data-id="${j}"]`);
+//             console.log(j);
+//             if(status==200){
+//                 let res=JSON.parse(e.srcElement.responseText);
+                // // 添加到结果数组
+                // window.imgResult.push(res);
+                // // 写入代码框
+                // row.querySelector(".img-item-code").innerHTML=res["url"];
+                // // 赋予按钮事件
+                // row.querySelector("#item-btn-uri").addEventListener("click",function(){
+                //     // 切换uri
+                //     row.querySelector(".img-item-code").innerHTML=res["url"]
+                // });
+                // row.querySelector("#item-btn-md").addEventListener("click",function(){
+                //     // 切换markdown
+                //     let mdstr=`![小杜的个人图床](${res.url})`;
+                //     row.querySelector(".img-item-code").innerHTML=mdstr;
+                // });
+                // row.querySelector("#item-btn-html").addEventListener("click",function(){
+                //     // 切换markdown
+                //     let htmlstr=`&lt;img src="${res.url}" title="小杜的图床" alt='图床无拉！'&gt;`;
+                //     row.querySelector(".img-item-code").innerHTML=htmlstr;
+                // });
+//             }else{
+//                 // 添加到结果数组
+//                 window.imgResult.push("上传失败");
+//                 // 写入代码框
+//                 row.querySelector(".img-item-code").innerHTML="上传失败";
+//             }
+//         });
+//     }
+// }
+let fetchUpload=function(){
+    let row=document.querySelector(`div[data-id="${imgIndex}"]`);
+    try{
+        let fd=new FormData();
+        fd.append("img",window.imgList[window.imgIndex]);
+        let promise=fetch("/api/files/upload",{
+            mode:"cors",
+            method:"post",
+            body:fd
+        });
+        console.log(window.imgList[window.imgIndex]);
+        let json=promise.then(function(e){
+            if(e.ok){
+                return e.json();
+            }else{
+                console.log("error");
+                return false;
+            }
+        });
+        json.then((res)=>{
+            // 添加到结果数组
+            window.imgResult.push(res);
+            // 写入代码框
+            row.querySelector(".img-item-code").innerHTML=res["url"];
+            // 赋予按钮事件
+            row.querySelector("#item-btn-uri").addEventListener("click",function(){
+                // 切换uri
+                row.querySelector(".img-item-code").innerHTML=res["url"]
+            });
+            row.querySelector("#item-btn-md").addEventListener("click",function(){
+                // 切换markdown
+                let mdstr=`![小杜的个人图床](${res.url})`;
+                row.querySelector(".img-item-code").innerHTML=mdstr;
+            });
+            row.querySelector("#item-btn-html").addEventListener("click",function(){
+                // 切换markdown
+                let htmlstr=`&lt;img src="${res.url}" title="小杜的图床" alt='图床无拉！'&gt;`;
+                row.querySelector(".img-item-code").innerHTML=htmlstr;
+            });
+            // 递归调用，直到达到imgList的最大索引
+            if(imgIndex<imgList.length){
+                imgIndex++;
+                fetchUpload();
+            }else{
+                // 上传完成
+                // 没有做接着上传的代码，如果继续上传导致前面的图片重新上传或者再次缩印偏差，暂时提示刷新后上传
+                document.querySelector(".menu-upload").setAttribute("onclick",function(){
+                    alert("请刷新后上传");
+                });
+            }
+        })
+    }catch(error){
+        //添加到结果数组
+        window.imgResult.push("上传失败");
+        // 写入代码框
+        row.querySelector(".img-item-code").innerHTML="上传失败";
+        return false;
+    }
+}
+let multiUpload=function(){
+    window.imgIndex=0;
+    // 当前索引
+    window.imgResult=new Array();
+    // 结果数组
+    // 移除上传按钮事件防止多次上传
+    document.querySelector(".menu-upload").setAttribute("onclick",null);
+    fetchUpload();
+}
+
+
 let node=document.querySelector("#img-container");
 // 取得图片容器元素
 let input=document.querySelector("#click-file");
@@ -259,7 +416,7 @@ window.onload=()=>{
     // 以下是批量上传部分
     // 构建批量上传全局变量对象
     window.imgList=new Array();
-    
+
 }
 
 // 为change group添加事件
