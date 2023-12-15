@@ -1,4 +1,4 @@
-<?php /*a:1:{s:68:"/www/wwwroot/pic.xiaodu0.com/application/index/view/index/index.html";i:1700996073;}*/ ?>
+<?php /*a:1:{s:68:"/www/wwwroot/pic.xiaodu0.com/application/index/view/index/index.html";i:1701052692;}*/ ?>
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -85,7 +85,7 @@
                 <div class="list-no-content" id="list-no-content">
                     <img src="/assets/index/img/empty.png" alt="" class="empty-img">
                     <p style="color: rgb(79, 78, 78);">还没有图片，拖动/粘贴到此或点击下方按钮添加</p>
-                </div>
+                </div>   
             </div>
         </div>
         <div class="file-list-menu">

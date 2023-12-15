@@ -215,8 +215,14 @@ let addImg2Page=function(file){
     uri.id="item-btn-uri";
     // 切换到uri的按钮
     let html=document.createElement("span");
-    html.id="item-btn-html"
+    html.id="item-btn-html";
     // 切换到图片标签的按钮
+    let remove=document.createElement("span");
+    remove.id="item-btn-remove";
+    // 移除图片按钮
+
+
+
     item.classList.add("img-list-item");
     item.setAttribute("data-id",imgList.length-1);
     // 容器
@@ -250,6 +256,10 @@ let addImg2Page=function(file){
     html.appendChild(icon_html);
     // html按钮
 
+    icon_remove=document.createElement("img");
+    icon_remove.setAttribute("src","/assets/index/img/delete.png");
+    remove.appendChild(icon_remove);
+
     btnGroup.classList.add("img-item-btn-group");
     btnGroup.appendChild(uri);
     btnGroup.appendChild(md);
@@ -261,8 +271,36 @@ let addImg2Page=function(file){
     item.appendChild(name);
     item.appendChild(code);
     item.appendChild(btnGroup);
+    item.appendChild(remove);
     document.querySelector("#file-list-box").appendChild(item);
 
+    // 移除按钮事件
+    remove.addEventListener("click",function(e){
+        // 被点击的元素
+        let src=e.target;
+        
+        // // 移除预览区
+        // document.querySelector("#file-list-box").removeChild(item);
+        // // 移除待传列表
+        // imgList.splice(imgList.length-1,1);
+        // // 更新后面的索引
+        // for(x=imgList.length-1;x<=document.getElementsByClassName("img-list-item").length;x++){
+        //     // 将所有后面的元素索引-1
+        //     document.querySelector(`div[data-id="${x}"]`).setAttribute("data-id",x-1);
+        //     console.log(x,document.getElementsByClassName("img-list-item").length);
+        // }
+        // console.log(e);
+    },false);
+    // remove.onclick=function(e,i=imgList.length-1) {
+    //     // document.querySelector("#file-list-box").removeChild(item);
+    //     // 更新后面的索引
+    // //     for(x=imgList.length-1;x<document.getElementsByClassName("img-list-item").length;x++){
+    // //         // 将所有后面的元素索引-1
+    // //         console.log(x,i);
+    // //     }
+    // //     imgList.splice(imgList.length-1,1);
+    //     // console.log(imgList.length-1,i);
+    // }
 }
 let addFile=(e)=>{
     // 选择图片事件
@@ -319,7 +357,7 @@ let addFile=(e)=>{
 //     }
 // }
 let fetchUpload=function(){
-    let row=document.querySelector(`div[data-id="${imgIndex}"]`);
+    row=document.querySelector(`[data-id="${imgIndex}"]`);
     try{
         let fd=new FormData();
         fd.append("img",window.imgList[window.imgIndex]);
@@ -328,7 +366,6 @@ let fetchUpload=function(){
             method:"post",
             body:fd
         });
-        console.log(window.imgList[window.imgIndex]);
         let json=promise.then(function(e){
             if(e.ok){
                 return e.json();
@@ -338,6 +375,7 @@ let fetchUpload=function(){
             }
         });
         json.then((res)=>{
+            console.log(imgIndex,row);
             // 添加到结果数组
             window.imgResult.push(res);
             // 写入代码框
@@ -357,9 +395,10 @@ let fetchUpload=function(){
                 let htmlstr=`&lt;img src="${res.url}" title="小杜的图床" alt='图床无拉！'&gt;`;
                 row.querySelector(".img-item-code").innerHTML=htmlstr;
             });
+
             // 递归调用，直到达到imgList的最大索引
-            if(imgIndex<imgList.length){
-                imgIndex++;
+            if(window.imgIndex<imgList.length-1){
+                window.imgIndex++;
                 fetchUpload();
             }else{
                 // 上传完成
