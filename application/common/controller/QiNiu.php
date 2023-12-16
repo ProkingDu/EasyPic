@@ -7,7 +7,8 @@ use app\common\model\Config;
 use Qiniu\Storage\UploadManager;
 use Qiniu\Storage\BucketManager;
 use app\common\controller\Base;
-class Qiniu extends Base{
+
+class Qiniu extends Controller{
     /**
      * @var $Ak 七牛云Ak
      * @var $Sk 七牛云Sk
@@ -102,6 +103,13 @@ class Qiniu extends Base{
         }
     }
 
+    /**
+     * 获得当前空间的域名
+     */
+    public function getDomain(){
+        $bucket=new BucketManager($this->auth);
+        return $bucket->domains($this->bucket);
+    }
     // /**
     //  * 从七牛云返回的错误对象中得的消息
     //  * @param $obj Error类的实例

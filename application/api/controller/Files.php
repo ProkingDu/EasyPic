@@ -1,8 +1,9 @@
 <?php
 namespace app\api\controller;
+
 use think\Controller;
 use app\common\model\Config;
-
+use app\common\controller\QiNiu;
 class Files extends Controller{
     /**
      * @var array $allowType 允许上传的文件类型数组
@@ -22,6 +23,9 @@ class Files extends Controller{
             'webp',
             'jpeg',
         ];
+
+        // 查询本地文件保存路径
+        $this->localPath=Config::where(['name'=>"local_path","class"=>"base"])->select()[0]["value"];
     }
 
     /**
@@ -36,7 +40,6 @@ class Files extends Controller{
             $nameLength=strlen($file['name']);    //文件名长度
             $expendLength=strlen(".".$this->allowType[$i]);  //扩展名长度
             $addLength=$pos+$expendLength;    // 用于判断是否和文件名长度相等
-            var_dump($pos,$nameLength,$expendLength,$addLength,":");
             if(strpos($file['type'],$this->allowType[$i]) !== false and (((int)$pos==0 and $addLength==$expendLength) or ((int)$pos!=0 and $addLength == $nameLength))){
                 // file type或者filename最后包含合法扩展名即跳过循环
                 break;
@@ -54,7 +57,7 @@ class Files extends Controller{
      * @var $_FILES 上传过来的文件数组
      * @var $file 图片信息数组
      */
-    public function upload(){
+    public function upload(Qiniu $qiniu){
 
         $file=$_FILES['img'];  //      上传过来的文件
 
@@ -74,30 +77,42 @@ class Files extends Controller{
 
         //      生成文件信息
         $tmp=$file['tmp_name'];   //临时文件地址
-        $root=$_SERVER['DOCUMENT_ROOT'].'/assets/uploads/'.date("Ymd");    //本地文件路径
+        $filename=$this->dealFileName($file["name"]);
+        $root=$_SERVER['DOCUMENT_ROOT'].'/assets/uploads/'.date("Ymd").$this->dealFileName($filename);    //本地文件路径
         $type=str_replace("image/","",$file['type']);   //文件后缀
-        $name=md5(time().$_SERVER['REMOTE_ADDR'].rand(10000000,99999999)).".".$type;
-        $remote_path=sprintf("%s/%s/%s/%s",date("Y"),date("m"),date("d"),$name);    //远程文件路径
+        $remotePath=sprintf("%s/%s/%s/%s",date("Y"),date("m"),date("d"),$filename);    //远程文件路径
 
         if($this->allowQiniu == 1){
             // 上传到七牛云
-            // 取得文件名
-            $filename=$this->dealFileName($file["name"]);
             if($this->saveLocal == 1){
                 // 如果储存在本地
-                $path=$this->saveLocal($file);
-                return $path;
+                $relativePath=$this->saveLocal($file);
+                // 上传到七牛云
+                $rs_cloud=$qiniu->serviceUpload($_SERVER['DOCUMENT_ROOT'].$relativePath,$remotePath);
+            }else{
+                // 将临时副本上传到七牛云
+                $rs_cloud=$qiniu->serviceUpload($file['tmp_name'],$remotePath);
             }
+        }else{
+            // 仅保存本地
+            $relativePath=$relativePath=$this->saveLocal($file);
         }
-//        移动临时文件到路径
-        
 
         
-        // if($rs!==false){
-        //     return json_encode(['status'=>'success','msg'=>'上传成功！','filename'=>$filename,'path'=>str_replace($_SERVER['DOCUMENT_ROOT'],"",$root)."/".$filename,'url'=>"http://".$_SERVER['HTTP_HOST']."/".str_replace($_SERVER['DOCUMENT_ROOT'],"",$root)."/".$filename]);
-        // }else{
-        //     return json_encode(['status'=>'error','msg'=>'未知错误！']);
-        // }
+        if(($this->saveLocal && $relativePath!==false) or ($this->allowQiniu && $rs_cloud !==false)){
+            // 生成返回信息
+            $result=array('status'=>"success","msg"=>"上传成功！");
+            if($this->allowQiniu == 1){
+                // 根据是否上传云端生成url
+                $url="http://".$qiniu->getDomain()[0][0]."/".$remotePath;
+            }else{
+                // 本地保存url
+                $url="http://".$_SERVER['HTTP_HOST'].$relativePath;
+            }
+            return json_encode(['status'=>'success','msg'=>'上传成功！','filename'=>$filename,'path'=>str_replace($_SERVER['DOCUMENT_ROOT'],"",$root)."/".$filename,'url'=>$url]);
+        }else{
+            return json_encode(['status'=>'error','msg'=>'上传失败！']);
+        }
     }
 
     /**
@@ -107,10 +122,9 @@ class Files extends Controller{
      */
     public function saveLocal($file){
         //      生成文件信息
-        $this->dirname='/assets/uploads/'; //文件储存地址
-        $root=$_SERVER['DOCUMENT_ROOT'].$this->dirname.date("Ymd");    //本地文件路径
+        $root=$_SERVER['DOCUMENT_ROOT'].$this->localPath."/".date("Ymd");    //文件绝对路径 用于移动临时文件
         $name=$this->dealFileName($file["name"]);  //文件名
-        $relativeName=$this->dirname.$name;    //文件相对路径
+        $relativeName=$this->localPath."/".date("Ymd")."/".$name;    //文件相对路径
         // 移动到新路径
         file_exists($root) || mkdir($root);
         $filepath=$root."/".$name;
@@ -138,7 +152,6 @@ class Files extends Controller{
         // 转换文件名
         $nameList=[];
         $nameStr="";
-        echo "原数字：";
         for($i=0;$i<strlen($name);$i++){
             // 获得ASII码
             $ascii=ord($name[$i]);
@@ -150,7 +163,6 @@ class Files extends Controller{
                 $back=$ascii;
             }
             $nameStr.="x".$back;
-            echo $ascii.",";
         }
         $nameStr=base64_encode($nameStr);
 
