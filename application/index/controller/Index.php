@@ -18,6 +18,6 @@ class Index extends Base
         // var_dump($q->serviceUpload("16955631272f4388a528b781ed15bf2b3e89d07bc5.png","t/t.png"));
         // var_dump($q->readFile("test/test1.png"));
         // var_dump();
-        Files::dealFileName("test.png");
+        // (new Files)->upload("test.png");
     }
 }
