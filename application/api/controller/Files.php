@@ -195,7 +195,7 @@ class Files extends Controller{
         $result=base64_encode($str);
         
         // 转md5
-        $result=md5($str).".".$type;
+        $result=md5($str.time()).".".$type;
         return $result;
     }
     
